@@ -38,7 +38,7 @@ public class GeminiService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
-
+//Opening Gemini response to get relevent response text
         try {
             // Parse nested structure: candidates[0].content.parts[0].text
             List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.getBody().get("candidates");

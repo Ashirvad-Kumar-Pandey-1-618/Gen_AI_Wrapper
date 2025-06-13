@@ -12,7 +12,7 @@ public class TelegramPollingScheduler {
         this.telegramService = telegramService;
     }
 
-    // Every 5 seconds
+    // Check for any new message from Telegram every 5 seconds --> And reply to it with AI generated response
     @Scheduled(fixedRate = 5000)
     public void pollTelegram() {
         telegramService.pollMessagesAndReply();

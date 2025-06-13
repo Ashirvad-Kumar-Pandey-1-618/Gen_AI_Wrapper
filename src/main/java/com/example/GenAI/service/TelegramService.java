@@ -70,8 +70,9 @@ public class TelegramService {
         }
     }
 
-
+//This method will check for next Telegram messages every 5 seconds --> Pass to Gemini --> Reply user with Gemini Response;
     public void pollMessagesAndReply() {
+        //Building URL for Telegram API to get new updates after last chat;
         String url = telegramApiUrl + botToken + "/getUpdates?timeout=5&offset=" + (lastUpdateId + 1);
 
         System.out.println("Polling Telegram for updates...\nURL: " + url);
@@ -81,7 +82,7 @@ public class TelegramService {
             System.out.println("Failed to get updates");
             return;
         }
-
+//Opening received Telegram response packet to fetch chatId and message text;
         try {
             JSONObject json = new JSONObject(response.getBody());
             JSONArray updates = json.getJSONArray("result");
@@ -103,12 +104,14 @@ public class TelegramService {
 
                 System.out.println("Received NEW message: " + text + " from chat ID: " + chatId + "User Name: " + messageObj.getJSONObject("chat").getString("first_name"));
 
+                //For now , we're not using personalities for Gemini - handling common responses --> The persona will be part of next release GenAI-2.0
                 if (text.equalsIgnoreCase("start")|| text.equalsIgnoreCase("hi")|| text.equalsIgnoreCase("hello")) {
                     sendMessage(chatId, "Hi! I'm your AI assistant LIFC-blr_GEN_AI_WRAPPER. Ask me anything.");
                 } else if (text.equalsIgnoreCase("help")) {
                     sendMessage(chatId, "Send any question or message. Type 'Explain more' to follow up.");
                 }
                 else {
+                    //Calling Gemini to get AI generated response
                         try {
                             // Gemini call
                             String geminiReply = geminiService.getGeminiResponse(text);
